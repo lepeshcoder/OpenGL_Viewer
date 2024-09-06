@@ -13,7 +13,13 @@ find_package(nfd CONFIG REQUIRED)
 
 
 add_executable(Project main.cpp
-       main.cpp
+        main.cpp
+        Entities/Vertex/Vertex.h
+        Entities/Texture/Texture.h
+        Enums/TextureType.h
+        Mesh/Mesh.cpp
+        Mesh/Mesh.h
+        Entities/Material/Material.h
 )
 
 target_include_directories(Project PRIVATE ${Stb_INCLUDE_DIR})

@@ -1,0 +1,16 @@
+//
+// Created by Lepesh on 06.09.2024.
+//
+
+#ifndef OPENGLPROJECT_TEXTURETYPE_H
+#define OPENGLPROJECT_TEXTURETYPE_H
+
+enum class TextureType{
+    ALBEDO_MAP,
+    NORMAL_MAP,
+    METALLIC_MAP,
+    ROUGHNESS_MAP,
+    AMBIENT_OCCLUSION_MAP
+};
+
+#endif //OPENGLPROJECT_TEXTURETYPE_H
