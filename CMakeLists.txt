@@ -20,6 +20,8 @@ add_executable(Project main.cpp
         Mesh/Mesh.cpp
         Mesh/Mesh.h
         Entities/Material/Material.h
+        Shader/Shader.cpp
+        Shader/Shader.h
 )
 
 target_include_directories(Project PRIVATE ${Stb_INCLUDE_DIR})
