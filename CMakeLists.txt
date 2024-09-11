@@ -17,11 +17,14 @@ add_executable(Project main.cpp
         Entities/Vertex/Vertex.h
         Entities/Texture/Texture.h
         Enums/TextureType.h
-        Mesh/Mesh.cpp
-        Mesh/Mesh.h
+        Entities/Mesh/Mesh.cpp
+        Entities/Mesh/Mesh.h
         Entities/Material/Material.h
         Shader/Shader.cpp
         Shader/Shader.h
+        Entities/Model/Model.cpp
+        Entities/Model/Model.h
+        Enums/PipelineType.h
 )
 
 target_include_directories(Project PRIVATE ${Stb_INCLUDE_DIR})

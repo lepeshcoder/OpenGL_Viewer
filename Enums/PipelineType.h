@@ -1,0 +1,17 @@
+//
+// Created by Lepesh on 11.09.2024.
+//
+
+#ifndef OPENGLPROJECT_PIPELINETYPE_H
+#define OPENGLPROJECT_PIPELINETYPE_H
+
+enum class Pipeline{
+    WIREFRAME,
+    FLAT_SHADING,
+    GOURAUD_SHADING,
+    PHONG_SHADING,
+    PBR,
+    RAY_TRACING
+};
+
+#endif //OPENGLPROJECT_PIPELINETYPE_H

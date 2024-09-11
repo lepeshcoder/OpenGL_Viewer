@@ -8,9 +8,9 @@
 #include<iostream>
 #include<vector>
 #include<glad/glad.h>
-#include "../Entities/Vertex/Vertex.h"
-#include "../Entities/Material/Material.h"
-#include "../Shader/Shader.h"
+#include "../Vertex/Vertex.h"
+#include "../Material/Material.h"
+#include "../../Shader/Shader.h"
 
 using std::vector, std::string;
 
