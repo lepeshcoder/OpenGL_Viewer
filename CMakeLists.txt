@@ -28,6 +28,9 @@ add_executable(Project
         Camera/Implementations/ArcBallCamera/ArcBallCamera.h
         Camera/Implementations/FPSCamera/FPSCamera.cpp
         Camera/Implementations/FPSCamera/FPSCamera.h
+        Scene/Scene.h
+        Scene/Scene.cpp
+        Enums/CameraType.h
 )
 
 
