@@ -17,15 +17,17 @@ private:
     // Model's meshes
     vector<Mesh> Meshes;
     // Model matrix
-    glm::mat4 ModelMatrix;
+    glm::mat4 ModelMatrix{};
 
 public:
 
-    Model(const vector<Mesh>& meshes, const glm::mat4& modelMatrix);
+    Model() = default;
+
+    Model(const vector<Mesh>& meshes, const glm::mat4& modelMatrix = glm::mat4(0));
 
     // Main Methods
 
-    void Draw(Shader& shader);
+    void Draw(Shader& shader) const;
 
     // Getters
 

@@ -38,7 +38,8 @@ public:
          const struct Material& material);
 
     // Main Methods
-    void Draw(Shader& shader);
+
+    void Draw(Shader& shader) const;
 
 
 

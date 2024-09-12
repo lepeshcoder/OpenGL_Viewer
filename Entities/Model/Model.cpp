@@ -9,9 +9,9 @@ Model::Model(const vector<Mesh> &meshes, const glm::mat4 &modelMatrix) {
     ModelMatrix = modelMatrix;
 }
 
-void Model::Draw(Shader &shader) {
+void Model::Draw(Shader &shader) const {
     //TODO: add uniforms as modelMatrix and etc to shader
-    for( Mesh& mesh : Meshes){
+    for(const auto & mesh : Meshes){
         mesh.Draw(shader);
     }
 }
@@ -23,3 +23,5 @@ const vector<Mesh> &Model::GetMeshes() {
 const glm::mat4 &Model::GetModelMatrix() {
     return ModelMatrix;
 }
+
+

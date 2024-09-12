@@ -5,9 +5,6 @@
 #ifndef OPENGLPROJECT_MATERIAL_H
 #define OPENGLPROJECT_MATERIAL_H
 
-#include<iostream>
-#include<vector>
-
 struct Material{
     uint32_t AlbedoMapTextureId;
     uint32_t NormalMapTextureId;
