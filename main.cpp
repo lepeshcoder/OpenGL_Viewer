@@ -1,5 +1,8 @@
 #include <iostream>
 #include "ModelStorage/ModelStorage.h"
+#include "Camera/Implementations/ArcBallCamera/ArcBallCamera.h"
+#include "Camera/Contracts/ICamera/ICamera.h"
+#include "Camera/Implementations/FPSCamera/FPSCamera.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -10,8 +13,29 @@ int screenHeight = 800;
 double deltaTime = 0;
 double lastFrame = 0;
 
+//mouse input
+float lastX = 0;
+float lastY = 0;
+float deltaX = 0;
+float deltaY = 0;
+float deltaWheel = 0;
+bool isPressed = false;
+//etc
+int frameCounter = 0;
+
+glm::vec3 dir{};
+double counter = 0;
+
+
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+
 void processInput(GLFWwindow *window);
+
+void mouse_callback(GLFWwindow *window, double xpoxsIn, double yposIn);
+
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
+
+void mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
 
 int main() {
 
@@ -27,8 +51,11 @@ int main() {
 
     //glfw штуки
     glfwMakeContextCurrent(window);
-
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+    //  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSwapInterval(1);
 
     gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
@@ -57,62 +84,69 @@ int main() {
     auto model3 = modelStorage.GetModelByPath(model3FilePath);
     auto model4 = modelStorage.GetModelByPath(model4FilePath);
 
-
-    float radius = 10;
-    float angle = 0;
-    glm::vec3 eye = glm::vec3(radius * cos(angle),0,radius * sin(angle));
+    //ICamera *camera = new ArcBallCamera(10, 0, 0, 50, 100);
+    ICamera *camera = new FPSCamera();
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    auto model = glm::mat4(1.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f),
+                                            (float) screenWidth / (float) screenHeight,
+                                            0.1f,
+                                            100.0f);
+
 
     while (!glfwWindowShouldClose(window)) {
 
+        // timing
         double currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
+        //fps
+        counter += deltaTime;
+        frameCounter++;
+        if (counter > 1)
+        {
+            std::cout << "FPS: " << frameCounter << std::endl;
+            counter = frameCounter = 0;
+        }
+
+
+
+        // camera update
+        CameraMouseInput cmi{deltaX, deltaY, deltaWheel};
+        CameraKeyboardInput cki{ dir };
+        camera->Update(cmi, cki, deltaTime);
+        deltaX = deltaY = deltaWheel = 0;
+        dir = {0,0,0};
+
+        // events
         processInput(window);
 
+        // clear screen
         glViewport(0, 0, screenWidth, screenHeight);
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // use shader
         shaderProgram.use();
 
-        glm::mat4 projection = glm::perspective(glm::radians(45.0f),
-                                                (float) screenWidth / (float) screenHeight,
-                                                0.1f,
-                                                100.0f);
+        glm::mat4 view = camera->GetViewMatrix();
 
-        angle += 40.0f * deltaTime;
-        angle = fmod(angle,360.0f);
-        eye = glm::vec3 (radius * sin(glm::radians(angle)),0, radius * cos(glm::radians(angle)));
-        glm::vec3 center = glm::vec3(0,0,0);
-        glm::vec3 up = glm::vec3(0,1,0);
-
-        glm::mat4 view = glm::lookAt(eye,center,up);
-
-        auto model = glm::mat4(1.0f);
-        model = glm::translate(model,
-                               glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));    // it's a bit too big for our scene, so scale it down
-        model = glm::rotate(model,glm::radians(45.0f),glm::vec3(1,0,0));
-
-
+        // set uniforms
         shaderProgram.setUniform("projection", projection);
         shaderProgram.setUniform("view", view);
         shaderProgram.setUniform("model", model);
 
-
-
         // to Render
-
         model4.Draw(shaderProgram);
 
-
+        // glfw things
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-
+    delete camera;
     return 0;
 }
 
@@ -125,4 +159,37 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
 void processInput(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        dir.x += 1;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        dir.x -= 1;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        dir.z -= 1;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        dir.z += 1;
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        dir.y -= 1;
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        dir.y += 1;
+}
+
+void mouse_callback(GLFWwindow *window, double xposIn, double yposIn) {
+    if (isPressed) {
+        deltaX = xposIn - lastX;
+        deltaY = yposIn - lastY;
+    }
+    lastX = xposIn;
+    lastY = yposIn;
+}
+
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
+    deltaWheel = -yoffset;
+}
+
+void mouse_button_callback(GLFWwindow *window, int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        isPressed = true;
+    } else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+        isPressed = false;
+    }
 }

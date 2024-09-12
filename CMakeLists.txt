@@ -24,6 +24,10 @@ add_executable(Project
         TextureManager/TextureManager.h
         stb_Image.cpp
         Camera/Contracts/ICamera/ICamera.h
+        Camera/Implementations/ArcBallCamera/ArcBallCamera.cpp
+        Camera/Implementations/ArcBallCamera/ArcBallCamera.h
+        Camera/Implementations/FPSCamera/FPSCamera.cpp
+        Camera/Implementations/FPSCamera/FPSCamera.h
 )
 
 
