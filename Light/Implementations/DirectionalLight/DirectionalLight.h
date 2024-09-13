@@ -6,7 +6,7 @@
 #define OPENGLPROJECT_DIRECTIONALLIGHT_H
 
 #include<glm/glm.hpp>
-#include "../Contracts/ILight/ILight.h"
+#include "../../Contracts/ILight/ILight.h"
 
 class DirectionalLight : public ILight{
 

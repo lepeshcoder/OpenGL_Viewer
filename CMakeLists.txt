@@ -31,6 +31,13 @@ add_executable(Project
         Scene/Scene.h
         Scene/Scene.cpp
         Enums/CameraType.h
+        Light/Implementations/DirectionalLight/DirectionalLight.h
+        Light/Implementations/DirectionalLight/DirectionalLight.cpp
+        Light/Implementations/PointLight/PointLight.h
+        Light/Implementations/PointLight/PointLight.cpp
+        Light/Implementations/SpotLight/SpotLight.h
+        Light/Implementations/SpotLight/SpotLight.cpp
+        Light/Contracts/ILight/ILight.h
 )
 
 

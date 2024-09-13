@@ -21,6 +21,11 @@ Scene::Scene(CameraType cameraType) {
 
 Scene::~Scene() {
     delete camera;
+    for (auto& pair : Lights) {
+        delete pair.second;
+    }
+    Lights.clear();
+    ModelsByName.clear();
 }
 
 void Scene::AddModel(const string &name, const Model &model) {
@@ -29,10 +34,21 @@ void Scene::AddModel(const string &name, const Model &model) {
 }
 
 void Scene::RemoveModel(const string &name) {
-    if(ModelsByName.contains(name)) return;
+    if(!ModelsByName.contains(name)) return;
     ModelsByName.erase(name);
 }
 
 const Model &Scene::GetModelByName(const string &name) {
     return ModelsByName[name];
+}
+
+void Scene::AddLight(const string &name, ILight *light) {
+    if(Lights.contains(name)) return;
+    Lights[name] = light;
+}
+
+void Scene::RemoveLight(const string &name) {
+    if(!Lights.contains(name)) return;
+    delete Lights[name];
+    Lights.erase(name);
 }

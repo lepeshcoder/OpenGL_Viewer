@@ -13,6 +13,9 @@
 #include "../Camera/Implementations/ArcBallCamera/ArcBallCamera.h"
 #include "../Camera/Implementations/FPSCamera/FPSCamera.h"
 #include "../ModelStorage/ModelStorage.h"
+#include "../Light/Implementations/DirectionalLight/DirectionalLight.h"
+#include "../Light/Implementations/PointLight/PointLight.h"
+#include "../Light/Implementations/SpotLight/SpotLight.h"
 
 using std::unordered_map, std::string;
 
@@ -20,10 +23,10 @@ class Scene {
 
 private:
 
-    // name is primary key for models on the scene
-    unordered_map<string,Model> ModelsByName;
+    // name is primary key for models and Lights on the scene
+    unordered_map<string, Model> ModelsByName;
 
-//    unordered_map<string, Light> LightsByName;
+    unordered_map<string, ILight*> Lights;
 
     //camera
     ICamera* camera;
@@ -39,6 +42,10 @@ public:
     void AddModel(const string& name, const Model& model);
 
     void RemoveModel(const string& name);
+
+    void AddLight(const string& name, ILight* light);
+
+    void RemoveLight(const string& name);
 
     const Model& GetModelByName(const string& name);
 

@@ -6,7 +6,7 @@
 #define OPENGLPROJECT_POINTLIGHT_H
 
 #include<glm/glm.hpp>
-#include "../Contracts/ILight/ILight.h"
+#include "../../Contracts/ILight/ILight.h"
 
 class PointLight : public ILight{
 
@@ -18,6 +18,9 @@ private:
     glm::vec3 Attenuation; // x - Constant, y - Linear, z - Quadratic
 
 public:
+
+    PointLight(const glm::vec3& position, const glm::vec3& color,
+               const glm::vec3& attenuation, float intensity);
 
     const glm::vec3 &GetLightColor() const override;
 

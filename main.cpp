@@ -64,8 +64,8 @@ int main() {
 
     glEnable(GL_DEPTH_TEST);
 
-    Shader shaderProgram("..//Shader//Shaders//vertexShader.s",
-                         "..//Shader//Shaders//fragmentShader.s");
+    Shader shaderProgram("..//Shader//Shaders//WireFrameShaders//vertexShader.s",
+                         "..//Shader//Shaders//WireFrameShaders//fragmentShader.s");
 
     ModelStorage modelStorage;
     std::string model1FilePath = R"(C:\Users\Lepesh\Desktop\models\survival-guitar-backpack\source\Survival_BackPack_2\model.fbx)";
@@ -84,8 +84,8 @@ int main() {
     auto model3 = modelStorage.GetModelByPath(model3FilePath);
     auto model4 = modelStorage.GetModelByPath(model4FilePath);
 
-    //ICamera *camera = new ArcBallCamera(10, 0, 0, 50, 100);
-    ICamera *camera = new FPSCamera();
+    ICamera *camera = new ArcBallCamera(10, 0, 0, 50, 100);
+    //ICamera *camera = new FPSCamera();
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     auto model = glm::mat4(1.0f);
@@ -124,9 +124,17 @@ int main() {
         processInput(window);
 
         // clear screen
-        glViewport(0, 0, screenWidth, screenHeight);
-        glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glViewport(0, screenHeight * 1.0f / 7.0f , screenWidth * 5.0f / 7.0f, screenHeight * 6.0f / 7.0f);
+
+        glEnable(GL_SCISSOR_TEST);
+        glScissor(0, screenHeight * 1.0f / 7.0f, screenWidth * 5.0f / 7.0f, screenHeight * 6.0f / 7.0f);
+        glClearColor(0.3f, 0.3f, 0.3f, 1.0f); // Белый цвет для сцены
+        glClear(GL_COLOR_BUFFER_BIT);
+
 
         // use shader
         shaderProgram.use();
@@ -141,6 +149,8 @@ int main() {
         // to Render
         model4.Draw(shaderProgram);
 
+
+        glDisable(GL_SCISSOR_TEST);
         // glfw things
         glfwSwapBuffers(window);
         glfwPollEvents();

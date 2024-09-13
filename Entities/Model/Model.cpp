@@ -4,8 +4,9 @@
 
 #include "Model.h"
 
-Model::Model(const vector<Mesh> &meshes, const glm::mat4 &modelMatrix) {
+Model::Model(const vector<Mesh> &meshes, enum Pipeline pipeline, const glm::mat4 &modelMatrix) {
     Meshes = meshes;
+    Pipeline = pipeline;
     ModelMatrix = modelMatrix;
 }
 
@@ -23,5 +24,7 @@ const vector<Mesh> &Model::GetMeshes() {
 const glm::mat4 &Model::GetModelMatrix() {
     return ModelMatrix;
 }
+
+
 
 
